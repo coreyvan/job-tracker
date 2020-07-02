@@ -6,18 +6,22 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/coreyvan/job-tracker/business/data"
 	"github.com/coreyvan/job-tracker/business/mid"
 	"github.com/coreyvan/job-tracker/foundation/web"
 )
 
 // API constructs an http.Handler with all application routes defined.
-func API(build string, shutdown chan os.Signal, log *log.Logger) http.Handler {
+func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log.Logger) http.Handler {
 
 	// Construct the web.App which holds all routes as well as common Middleware.
 	app := web.NewApp(shutdown, mid.Logger(log), mid.Errors(log))
 
 	t := trackerHandlers{}
 	app.Handle("GET", "/", t.home)
+
+	c := companyHandlers{gqlConfig: gql}
+	app.Handle("POST", "/company", c.create)
 
 	return app.Mux()
 }

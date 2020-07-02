@@ -77,3 +77,11 @@ Maybe suggest actions based on the progress of the application?
 
 - Title: string
 - Done: boolean
+
+## Resources
+
+- https://github.com/ardanlabs/service
+- https://github.com/gorilla/mux
+- https://github.com/dgraph-io/dgo#creating-a-client
+- https://github.com/dgraph-io/travel/
+- https://github.com/ardanlabs/graphql/

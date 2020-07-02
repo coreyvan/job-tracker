@@ -12,6 +12,8 @@ import (
 
 	"github.com/ardanlabs/conf"
 	"github.com/coreyvan/job-tracker/app/tracker-api/handlers"
+	"github.com/coreyvan/job-tracker/business/data"
+	"github.com/coreyvan/job-tracker/business/data/schema"
 	"github.com/pkg/errors"
 )
 
@@ -37,6 +39,9 @@ func run(log *log.Logger) error {
 			WriteTimeout    time.Duration `conf:"default:5s"`
 			ShutdownTimeout time.Duration `conf:"default:5s"`
 		}
+		DGraph struct {
+			URL string `conf:"default:http://localhost:8080"`
+		}
 	}
 	cfg.Version.SVN = build
 	cfg.Version.Desc = "Application to track job applications by Corey Van Woert"
@@ -58,6 +63,22 @@ func run(log *log.Logger) error {
 		return errors.Wrap(err, "generating config for output")
 	}
 	log.Printf("main: Config :\n%v\n", out)
+
+	// =========================================================================
+	// Start Database
+
+	log.Println("main: Initializing database support")
+
+	gqlConfig := data.GraphQLConfig{
+		URL: cfg.DGraph.URL,
+	}
+
+	schemaConfig := schema.Config{}
+
+	err = data.UpdateSchema(gqlConfig, schemaConfig)
+	if err != nil {
+		return errors.Wrap(err, "updating schema")
+	}
 
 	// =========================================================================
 	// Start Debug Service
@@ -88,7 +109,7 @@ func run(log *log.Logger) error {
 
 	api := http.Server{
 		Addr:         cfg.Web.APIHost,
-		Handler:      handlers.API(build, shutdown, log),
+		Handler:      handlers.API(build, shutdown, gqlConfig, log),
 		ReadTimeout:  cfg.Web.ReadTimeout,
 		WriteTimeout: cfg.Web.WriteTimeout,
 	}
