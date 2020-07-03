@@ -16,11 +16,11 @@ var schema = struct {
 var _document = `
 type Company {
 	id: ID!
-	name: String! @search(by: [exact])
+	name: String! @search(by: [term])
 	description: String
-	industries: [String]
+	industries: [String] @search(by: [term])
 	website: String
 	months: Int
 	location: String
-	remote_possible: Boolean
+	remote_possible: Boolean @search
 }`

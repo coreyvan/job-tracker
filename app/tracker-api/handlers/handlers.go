@@ -22,6 +22,7 @@ func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log
 
 	c := companyHandlers{gqlConfig: gql}
 	app.Handle("POST", "/company", c.create)
+	app.Handle("GET", "/company/{id}", c.getOne)
 
 	return app.Mux()
 }

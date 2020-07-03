@@ -55,3 +55,43 @@ mutation {
 
 	return mutation, result
 }
+
+// GetOne retrieves a company by ID
+func GetOne(ctx context.Context, gql *graphql.GraphQL, id string) (Company, error) {
+	c, err := getOne(ctx, gql, id)
+	if err != nil {
+		return Company{}, err
+	}
+	return c, nil
+}
+
+func getOne(ctx context.Context, gql *graphql.GraphQL, id string) (Company, error) {
+
+	query := fmt.Sprintf(`
+query {
+	getCompany(id: %q) {
+		id
+		name
+		description
+		industries
+		website
+		months
+		location
+		remote_possible
+	}
+}`, id)
+
+	var result struct {
+		GetCompany Company `json:"getCompany"`
+	}
+
+	if err := gql.Query(ctx, query, &result); err != nil {
+		return Company{}, errors.Wrap(err, "failed to find company")
+	}
+
+	if result.GetCompany.ID == "" {
+		return Company{}, errors.New("city not found")
+	}
+
+	return result.GetCompany, nil
+}
