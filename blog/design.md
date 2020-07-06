@@ -32,9 +32,10 @@ Maybe suggest actions based on the progress of the application?
 ### Company
 
 - Name: string
+- Description: string
 - Website: string URL
 - Industry (tags?) [strings] enum?
-- Years - int months
+- Months - int months
 - HQ location - geo location (city, (state), country)
 - Open to remote? boolean
 
