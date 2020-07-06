@@ -29,3 +29,17 @@ func (addResult) document() string {
 			}
 		}`
 }
+
+type deleteResult struct {
+	DeleteCompany struct {
+		Msg     string
+		NumUids int
+	} `json:"deleteCompany"`
+}
+
+func (deleteResult) document() string {
+	return `{
+		msg,
+		numUids,
+	}`
+}
