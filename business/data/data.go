@@ -57,7 +57,7 @@ func UpdateSchema(gqlConfig GraphQLConfig, schemaConfig schema.Config) error {
 
 	err := ready.Validate(ctx, gqlConfig.URL, 5*time.Second)
 	if err != nil {
-		return errors.Wrapf(err, "waiting for database to be ready")
+		return errors.Wrapf(err, "waiting for database to be ready, database timed out or does not exist")
 	}
 
 	gql := NewGraphQL(gqlConfig)

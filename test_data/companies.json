@@ -1,0 +1,29 @@
+[
+  {
+    "Company.name": "Corndog Inc",
+    "Company.website": "corndog.com",
+    "Company.description": "Makes corndogs",
+    "Company.industries": ["corndogs", "lifestyles"],
+    "Company.months": 12,
+    "Company.location": "Nashville, TN",
+    "Company.remote_possible": true
+  },
+  {
+    "Company.name": "Moonbase Industries",
+    "Company.website": "moonbase.com",
+    "Company.description": "Galactic voyages",
+    "Company.industries": ["space", "lifestyles"],
+    "Company.months": 48,
+    "Company.location": "Seattle, WA",
+    "Company.remote_possible": true
+  },
+  {
+    "Company.name": "Meteor Street Studio",
+    "Company.website": "meteorstreetstudios.com",
+    "Company.description": "Branding design for inspire businesses",
+    "Company.industries": ["design", "business", "entrepreneurs"],
+    "Company.months": 16,
+    "Company.location": "Londom, United Kingdom",
+    "Company.remote_possible": true
+  }
+]

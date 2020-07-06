@@ -8,3 +8,6 @@ dgraph:
 		-p 9080:9080 \
 		-p 8000:8000 \
 		dgraph/standalone:latest
+
+import:
+	go build app/tracker-admin/main.go && ./main import && rm main
