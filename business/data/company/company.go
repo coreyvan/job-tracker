@@ -142,3 +142,30 @@ func getOneByName(ctx context.Context, gql *graphql.GraphQL, query string) (Comp
 
 	return result.GetCompany[0], nil
 }
+
+// List returns all companies
+func List(ctx context.Context, gql *graphql.GraphQL, limit int) ([]Company, error) {
+	gquery := fmt.Sprintf(`
+ query {
+	getCompanies(func: has(Company.name), first: %d) {
+		uid
+		Company.name
+		Company.description
+		Company.industries
+		Company.website
+		Company.months
+		Company.location
+		Company.remote_possible
+	}
+}`, limit)
+
+	var result struct {
+		GetCompanies []Company `json:"getCompanies"`
+	}
+
+	if err := gql.QueryPM(ctx, gquery, &result); err != nil {
+		return []Company{}, errors.Wrap(err, "failed to list companies")
+	}
+
+	return result.GetCompanies, nil
+}
