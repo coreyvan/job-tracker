@@ -169,3 +169,46 @@ func List(ctx context.Context, gql *graphql.GraphQL, limit int) ([]Company, erro
 
 	return result.GetCompanies, nil
 }
+
+// Delete deletes a company by ID
+func Delete(ctx context.Context, gql *graphql.GraphQL, id string) error {
+	if _, err := getOne(ctx, gql, id); err != nil {
+		return errors.Wrap(err, "company does not exist")
+	}
+
+	if err := delete(ctx, gql, id); err != nil {
+		return errors.Wrap(err, "deleting company")
+	}
+
+	return nil
+}
+
+func prepareDelete(companyID string) (string, deleteResult) {
+	var result deleteResult
+	mutation := fmt.Sprintf(`
+mutation {
+	deleteCompany(filter: { id: [%q] })
+	%s
+}`, companyID, result.document())
+
+	return mutation, result
+}
+
+func delete(ctx context.Context, gql *graphql.GraphQL, id string) error {
+	if id == "" {
+		return errors.New("missing company id")
+	}
+
+	mutation, result := prepareDelete(id)
+
+	if err := gql.Query(ctx, mutation, &result); err != nil {
+		return errors.Wrap(err, "failed to list companies")
+	}
+	fmt.Println(result.DeleteCompany.NumUids)
+	if result.DeleteCompany.NumUids == 0 {
+		msg := fmt.Sprintf("failed to delete user: NumUids: %d  Msg: %s", result.DeleteCompany.NumUids, result.DeleteCompany.Msg)
+		return errors.New(msg)
+	}
+
+	return nil
+}
