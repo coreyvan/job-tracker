@@ -44,3 +44,17 @@ func (c *companyHandlers) getOne(ctx context.Context, w http.ResponseWriter, r *
 
 	return web.Respond(ctx, w, comp, http.StatusOK)
 }
+
+func (c *companyHandlers) search(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+	// vars := mux.Vars(r)
+	query := r.URL.Query()["search"]
+
+	gql := data.NewGraphQL(c.gqlConfig)
+
+	comp, err := company.GetOneByName(ctx, gql, query[0])
+	if err != nil {
+		return errors.Wrap(err, "retrieving company")
+	}
+
+	return web.Respond(ctx, w, comp, http.StatusOK)
+}

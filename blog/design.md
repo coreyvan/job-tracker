@@ -56,6 +56,7 @@ Maybe suggest actions based on the progress of the application?
 - Applied on: date
 - Actions: [action IDs, foreign key Actions]
 - Key contacts: [contact IDs, foreign key Contact]
+- Referrer: Contact
 
 ### Source
 

@@ -69,29 +69,76 @@ func getOne(ctx context.Context, gql *graphql.GraphQL, id string) (Company, erro
 
 	query := fmt.Sprintf(`
 query {
-	getCompany(id: %q) {
-		id
-		name
-		description
-		industries
-		website
-		months
-		location
-		remote_possible
+	getCompany(func: uid(%s)) {
+		uid
+		Company.name
+		Company.description
+		Company.industries
+		Company.website
+		Company.months
+		Company.location
+		Company.remote_possible
 	}
 }`, id)
 
 	var result struct {
-		GetCompany Company `json:"getCompany"`
+		GetCompany []Company `json:"getCompany"`
 	}
 
-	if err := gql.Query(ctx, query, &result); err != nil {
+	if err := gql.QueryPM(ctx, query, &result); err != nil {
 		return Company{}, errors.Wrap(err, "failed to find company")
 	}
 
-	if result.GetCompany.ID == "" {
-		return Company{}, errors.New("city not found")
+	if len(result.GetCompany) < 1 {
+		return Company{}, errors.New("company not found")
+	}
+	if result.GetCompany[0].ID == "" {
+		return Company{}, errors.New("company not found")
 	}
 
-	return result.GetCompany, nil
+	return result.GetCompany[0], nil
+}
+
+// GetOneByName retrieves a company by searching by name
+func GetOneByName(ctx context.Context, gql *graphql.GraphQL, query string) (Company, error) {
+	c, err := getOneByName(ctx, gql, query)
+	if err != nil {
+		return Company{}, err
+	}
+	return c, nil
+}
+
+func getOneByName(ctx context.Context, gql *graphql.GraphQL, query string) (Company, error) {
+
+	gquery := fmt.Sprintf(`
+ query {
+	getCompany(func:eq(Company.name, %q)) {
+		uid
+		Company.name
+		Company.description
+		Company.industries
+		Company.website
+		Company.months
+		Company.location
+		Company.remote_possible
+	}
+}`, query)
+
+	var result struct {
+		GetCompany []Company `json:"getCompany"`
+	}
+
+	if err := gql.QueryPM(ctx, gquery, &result); err != nil {
+		return Company{}, errors.Wrap(err, "failed to find company")
+	}
+
+	if len(result.GetCompany) < 1 {
+		return Company{}, errors.New("company not found")
+	}
+
+	if result.GetCompany[0].ID == "" {
+		return Company{}, errors.New("company not found")
+	}
+
+	return result.GetCompany[0], nil
 }

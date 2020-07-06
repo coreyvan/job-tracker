@@ -50,7 +50,7 @@ func NewApp(shutdown chan os.Signal, mw ...Middleware) *App {
 
 // Handle is our mechanism for mounting Handlers for a given HTTP verb and path
 // pair, this makes for really easy, convenient routing.
-func (a *App) Handle(verb, path string, handler Handler, mw ...Middleware) {
+func (a *App) Handle(verb, path string, params []string, handler Handler, mw ...Middleware) {
 
 	// First wrap handler specific middleware around this handler.
 	handler = wrapMiddleware(mw, handler)
@@ -74,7 +74,7 @@ func (a *App) Handle(verb, path string, handler Handler, mw ...Middleware) {
 	}
 
 	// Add this handler for the specified verb and route.
-	a.mux.Handle(path, http.HandlerFunc(h)).Methods(verb)
+	a.mux.Handle(path, http.HandlerFunc(h)).Methods(verb).Queries()
 }
 
 // SignalShutdown is used to gracefully shutdown the app when an integrity

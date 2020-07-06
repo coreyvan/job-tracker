@@ -18,11 +18,12 @@ func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log
 	app := web.NewApp(shutdown, mid.Logger(log), mid.Errors(log))
 
 	t := trackerHandlers{}
-	app.Handle("GET", "/", t.home)
+	app.Handle("GET", "/", nil, t.home)
 
 	c := companyHandlers{gqlConfig: gql}
-	app.Handle("POST", "/company", c.create)
-	app.Handle("GET", "/company/{id}", c.getOne)
+	app.Handle("POST", "/company", nil, c.create)
+	app.Handle("GET", "/company", []string{"search", "{query}"}, c.search)
+	app.Handle("GET", "/company/{id}", nil, c.getOne)
 
 	return app.Mux()
 }

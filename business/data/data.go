@@ -22,7 +22,7 @@ type GraphQLConfig struct {
 
 // Base base predicates that all dgraph nodes should have
 type Base struct {
-	ID        string    `json:"id"`
+	ID        string    `json:"uid"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
