@@ -11,3 +11,10 @@ dgraph:
 
 import:
 	go build app/tracker-admin/main.go && ./main import && rm main
+
+client-ui:
+	docker build \
+		-f ./client/Dockerfile \
+		-t job-tracker/client \
+		--build-arg NGINX_CONF='nginx.conf' \
+		client
