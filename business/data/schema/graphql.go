@@ -23,4 +23,19 @@ type Company {
 	months: Int
 	location: String
 	remote_possible: Boolean @search
-}`
+}
+
+type Role {
+	id: ID!
+	title: String! @search(by: [term])
+	company: Company!
+	url: String
+	technologies: [String] @search(by: [term])
+	pay_lower: Int
+	pay_upper: Int
+	location: String
+	level: String
+	remote_possible: Boolean @search
+	posted_on: String
+}
+	`

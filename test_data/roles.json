@@ -1,0 +1,40 @@
+[
+  {
+    "Role.title": "Senior Platform Engineer",
+    "Role.company": "0x2",
+    "Role.URL": "corngdogs.com/job",
+    "Role.technologies": ["AWS", "Terraform", "Elasticsearch"],
+    "Role.pay_lower": 145000,
+    "Role.pay_upper": 185000,
+    "Role.location": "San Francisco, CA",
+    "Role.level": "senior",
+    "Role.remote_possible": true,
+    "PostedOn": "2020-07-06"
+  },
+  {
+    "Role.title": "Underwater Basket Weaver",
+    "Role.company": "0x3",
+    "Role.URL": "moonbase.com/job",
+    "Role.technologies": ["bamboo", "baskets"],
+    "Role.pay_lower": 55000,
+    "Role.pay_upper": 65000,
+    "Role.location": "United States (remote)",
+    "Role.level": "junior",
+    "Role.remote_possible": true,
+    "PostedOn": "2020-07-06"
+  },
+  {
+    "Role.title": "Principal Software Architect",
+    "Role.company": {
+      "uid": "0x4"
+    },
+    "Role.URL": "meteorstreetstudio.com/job",
+    "Role.technologies": ["Golang", "GCP", "Kubernetes"],
+    "Role.pay_lower": 145000,
+    "Role.pay_upper": 185000,
+    "Role.location": "London, United Kingdom",
+    "Role.level": "principal",
+    "Role.remote_possible": true,
+    "PostedOn": "2020-07-06"
+  }
+]
