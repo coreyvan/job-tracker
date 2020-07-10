@@ -10,4 +10,7 @@ dgraph:
 		dgraph/standalone:latest
 
 import:
-	go build app/tracker-admin/main.go && ./main import && rm main
+	go run app/tracker-admin/main.go import
+
+schema:
+	go run app/tracker-admin/main.go schema
