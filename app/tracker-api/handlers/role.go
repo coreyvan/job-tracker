@@ -75,3 +75,17 @@ func (ro *roleHandlers) create(ctx context.Context, w http.ResponseWriter, r *ht
 	}
 	return web.Respond(ctx, w, role, http.StatusOK)
 }
+
+func (ro *roleHandlers) delete(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	gql := data.NewGraphQL(ro.gqlConfig)
+
+	err := role.Delete(ctx, gql, id)
+	if err != nil {
+		return errors.Wrap(err, "deleting role")
+	}
+
+	return web.Respond(ctx, w, nil, http.StatusOK)
+}

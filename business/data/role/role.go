@@ -223,9 +223,9 @@ func delete(ctx context.Context, gql *graphql.GraphQL, id string) error {
 	mutation, result := prepareDelete(id)
 
 	if err := gql.Query(ctx, mutation, &result); err != nil {
-		return errors.Wrap(err, "failed to list companies")
+		return errors.Wrap(err, "failed to delete role")
 	}
-	fmt.Println(result.DeleteRole.NumUids)
+
 	if result.DeleteRole.NumUids == 0 {
 		msg := fmt.Sprintf("failed to delete user: NumUids: %d  Msg: %s", result.DeleteRole.NumUids, result.DeleteRole.Msg)
 		return errors.New(msg)
