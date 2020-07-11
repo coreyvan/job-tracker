@@ -32,7 +32,7 @@ func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log
 	app.Handle("GET", "/roles", nil, r.list)
 	app.Handle("GET", "/role", []string{"search", "{query}"}, r.search)
 	app.Handle("GET", "/role/{id}", nil, r.getOne)
-	// app.Handle("DELETE", "/role/{id}", nil, r.delete)
+	app.Handle("DELETE", "/role/{id}", nil, r.delete)
 
 	return app.Mux()
 }
