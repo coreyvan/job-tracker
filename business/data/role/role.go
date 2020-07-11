@@ -3,6 +3,7 @@ package role
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/ardanlabs/graphql"
 	"github.com/pkg/errors"
@@ -40,21 +41,23 @@ func prepareAdd(Role Role) (string, addResult) {
 	mutation := fmt.Sprintf(`
 mutation {
 	addRole(input: [{
-		Role.title: %q
-		Role.company: %q
-		Role.URL: %q
-		Role.technologies: %q
-		Role.pay_lower: %d
-		Role.pay_upper: %d
-		Role.location: %q
-		Role.level: %q
-		Role.remote_possible: %t
-		Role.posted_on: %v
+		title: %q
+		company: {
+			id: %q
+		}
+		url: %q
+		technologies: %q
+		pay_lower: %d
+		pay_upper: %d
+		location: %q
+		level: %q
+		remote_possible: %t
+		posted_on: %q
 	}])
 	%s
 }`, Role.Title, Role.Company.ID, Role.URL,
 		Role.Technologies, Role.PayLower, Role.PayUpper,
-		Role.Location, Role.Level, Role.RemotePossible, Role.PostedOn, result.document())
+		Role.Location, Role.Level, Role.RemotePossible, Role.PostedOn.Format(time.RFC3339), result.document())
 
 	return mutation, result
 }
@@ -72,66 +75,75 @@ func getOne(ctx context.Context, gql *graphql.GraphQL, id string) (Role, error) 
 
 	query := fmt.Sprintf(`
 query {
-	getRole(func: uid(%s)) {
-		uid
-		Role.name
-		Role.description
-		Role.industries
-		Role.website
-		Role.months
-		Role.location
-		Role.remote_possible
+	getRole(id: %q) {
+		id
+		title
+		company {
+			id
+			name
+		}
+		url
+		technologies
+		pay_lower
+		pay_upper
+		location
+		level
+		remote_possible
+		posted_on
 	}
 }`, id)
 
 	var result struct {
-		GetRole []Role `json:"getRole"`
+		GetRole Role `json:"getRole"`
 	}
 
-	if err := gql.QueryPM(ctx, query, &result); err != nil {
+	if err := gql.Query(ctx, query, &result); err != nil {
 		return Role{}, errors.Wrap(err, "failed to find role")
 	}
 
-	if len(result.GetRole) < 1 {
-		return Role{}, errors.New("role not found")
-	}
-	if result.GetRole[0].ID == "" {
+	if result.GetRole.ID == "" {
 		return Role{}, errors.New("role not found")
 	}
 
-	return result.GetRole[0], nil
+	return result.GetRole, nil
 }
 
-// GetOneByName retrieves a Role by searching by name
-func GetOneByName(ctx context.Context, gql *graphql.GraphQL, query string) (Role, error) {
-	c, err := getOneByName(ctx, gql, query)
+// GetOneByTitle retrieves a Role by searching by name
+func GetOneByTitle(ctx context.Context, gql *graphql.GraphQL, query string) (Role, error) {
+	c, err := getOneByTitle(ctx, gql, query)
 	if err != nil {
 		return Role{}, err
 	}
 	return c, nil
 }
 
-func getOneByName(ctx context.Context, gql *graphql.GraphQL, query string) (Role, error) {
+func getOneByTitle(ctx context.Context, gql *graphql.GraphQL, query string) (Role, error) {
 
 	gquery := fmt.Sprintf(`
- query {
-	getRole(func:eq(Role.name, %q)) {
-		uid
-		Role.name
-		Role.description
-		Role.industries
-		Role.website
-		Role.months
-		Role.location
-		Role.remote_possible
-	}
-}`, query)
+	query {
+		queryRole(filter: { title: { anyofterms: %q } } ) {
+			id
+			title
+			company {
+				id
+				name
+			}
+			url
+			technologies
+			pay_lower
+			pay_upper
+			location
+			level
+			remote_possible
+			posted_on
+		}
+	}`, query)
 
 	var result struct {
-		GetRole []Role `json:"getRole"`
+		GetRole []Role `json:"queryRole"`
 	}
 
-	if err := gql.QueryPM(ctx, gquery, &result); err != nil {
+	if err := gql.Query(ctx, gquery, &result); err != nil {
 		return Role{}, errors.Wrap(err, "failed to find role")
 	}
 
@@ -150,23 +162,29 @@ func getOneByName(ctx context.Context, gql *graphql.GraphQL, query string) (Role
 func List(ctx context.Context, gql *graphql.GraphQL, limit int) ([]Role, error) {
 	gquery := fmt.Sprintf(`
  query {
-	getRoles(func: has(Role.name), first: %d) {
-		uid
-		Role.name
-		Role.description
-		Role.industries
-		Role.website
-		Role.months
-		Role.location
-		Role.remote_possible
+	queryRole(first: %d) {
+		id
+		title
+		company {
+			id
+			name
+		}
+		url
+		technologies
+		pay_lower
+		pay_upper
+		location
+		level
+		remote_possible
+		posted_on
 	}
 }`, limit)
 
 	var result struct {
-		GetCompanies []Role `json:"getRoles"`
+		GetCompanies []Role `json:"queryRole"`
 	}
 
-	if err := gql.QueryPM(ctx, gquery, &result); err != nil {
+	if err := gql.Query(ctx, gquery, &result); err != nil {
 		return []Role{}, errors.Wrap(err, "failed to list companies")
 	}
 

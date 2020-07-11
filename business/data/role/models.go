@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/coreyvan/job-tracker/business/data/company"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -13,18 +12,19 @@ var (
 )
 
 // Role represents the object model for a role
+// TODO: remote Role from names
 type Role struct {
-	ID             string          `json:"Role.ID"`
-	Title          string          `json:"Role.title"`
-	Company        company.Company `json:"Role.company"`
-	URL            string          `json:"Role.URL"`
-	Technologies   []string        `json:"Role.technologies"`
-	PayLower       int             `json:"Role.pay_lower"`
-	PayUpper       int             `json:"Role.pay_upper"`
-	Location       string          `json:"Role.location"`
-	Level          string          `json:"Role.level"`
-	RemotePossible bool            `json:"Role.remote_possible"`
-	PostedOn       time.Time       `json:"Role.posted_at"`
+	ID             string          `json:"id"`
+	Title          string          `json:"title"`
+	Company        company.Company `json:"company"`
+	URL            string          `json:"url"`
+	Technologies   []string        `json:"technologies"`
+	PayLower       int             `json:"pay_lower"`
+	PayUpper       int             `json:"pay_upper"`
+	Location       string          `json:"location"`
+	Level          string          `json:"level"`
+	RemotePossible bool            `json:"remote_possible"`
+	PostedOn       time.Time       `json:"posted_on"`
 }
 
 type addResult struct {
@@ -57,37 +57,14 @@ func (deleteResult) document() string {
 	}`
 }
 
-// UnmarshalJSON custom unmarshaler for Role
-func (r *Role) UnmarshalJSON(data []byte) error {
-	v := make(map[string]interface{})
-
-	if err := json.Unmarshal(data, &v); err != nil {
-		return errors.Wrap(err, "unmarshalling Role")
-	}
-
-	var ok bool
-	for _, t := range acceptedTimeFormats {
-		postedTime, err := time.Parse(t, v["posted_at"].(string))
-		if err == nil {
-			ok = true
-			r.PostedOn = postedTime
-			break
-		}
-	}
-
-	if !ok {
-		r.PostedOn = time.Now()
-	}
-
-	if id, ok := v["uid"]; ok {
-		r.ID = id.(string)
-	}
-
-	if _, ok := v["title"]; !ok {
-		return errors.New("role title does not exist")
-	}
-	r.Title = v["title"].(string)
-
-	r.Company = v["company"].(company.Company)
-	return nil
+// MarshalJSON custom marshaller for Roles
+func (r *Role) MarshalJSON() ([]byte, error) {
+	type Alias Role
+	return json.Marshal(struct {
+		PostedOn string `json:"posted_on"`
+		*Alias
+	}{
+		PostedOn: r.PostedOn.Format(time.RFC3339),
+		Alias:    (*Alias)(r),
+	})
 }

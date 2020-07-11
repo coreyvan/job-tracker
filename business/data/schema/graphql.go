@@ -36,6 +36,5 @@ type Role {
 	location: String
 	level: String
 	remote_possible: Boolean @search
-	posted_on: String
-}
-	`
+	posted_on: DateTime
+}`

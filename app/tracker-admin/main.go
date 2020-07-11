@@ -83,7 +83,7 @@ func run(log *log.Logger) error {
 
 	switch cfg.Args.Num(0) {
 	case "import":
-		if err := commands.Import(gqlConfig, log); err != nil {
+		if err := commands.Import(gqlConfig, log, cfg.Args.Num(1)); err != nil {
 			return errors.Wrap(err, "importing data")
 		}
 	case "schema":
