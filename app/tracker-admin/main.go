@@ -9,6 +9,7 @@ import (
 	"github.com/ardanlabs/conf"
 	"github.com/coreyvan/job-tracker/app/tracker-admin/commands"
 	"github.com/coreyvan/job-tracker/business/data"
+	"github.com/coreyvan/job-tracker/business/data/schema"
 	"github.com/pkg/errors"
 )
 
@@ -82,8 +83,13 @@ func run(log *log.Logger) error {
 
 	switch cfg.Args.Num(0) {
 	case "import":
-		if err := commands.Import(gqlConfig, log); err != nil {
+		if err := commands.Import(gqlConfig, log, cfg.Args.Num(1)); err != nil {
 			return errors.Wrap(err, "importing data")
+		}
+	case "schema":
+		schemaConfig := schema.Config{}
+		if err := commands.Schema(gqlConfig, schemaConfig, log); err != nil {
+			return errors.Wrap(err, "updating schema")
 		}
 	}
 	return nil

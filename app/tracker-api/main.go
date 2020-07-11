@@ -13,7 +13,6 @@ import (
 	"github.com/ardanlabs/conf"
 	"github.com/coreyvan/job-tracker/app/tracker-api/handlers"
 	"github.com/coreyvan/job-tracker/business/data"
-	"github.com/coreyvan/job-tracker/business/data/schema"
 	"github.com/pkg/errors"
 )
 
@@ -71,13 +70,6 @@ func run(log *log.Logger) error {
 
 	gqlConfig := data.GraphQLConfig{
 		URL: cfg.DGraph.URL,
-	}
-
-	schemaConfig := schema.Config{}
-
-	err = data.UpdateSchema(gqlConfig, schemaConfig)
-	if err != nil {
-		return errors.Wrap(err, "updating schema")
 	}
 
 	// =========================================================================

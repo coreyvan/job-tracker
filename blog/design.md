@@ -43,11 +43,12 @@ Maybe suggest actions based on the progress of the application?
 
 - Title: string
 - Company ID: foreign key company
+- URL: string
 - Technologies: [strings] enum?
 - Pay int
 - Remote: boolean
 - Location: geo location (nullable if remote is true)
-- Level: [string] enum
+- Level: string enum
 - Posted on: date
 
 ### Application
