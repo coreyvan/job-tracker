@@ -22,3 +22,23 @@
   bottom: 10px;
   justify-content: center;
 }
+
+.Role {
+  width: 300px;
+  height: 200px;
+  margin: 10px;
+  padding: 10px;
+  float: left;
+}
+
+.RoleButton {
+  position: absolute;
+  width: 260px;
+  bottom: 10px;
+  justify-content: center;
+}
+
+.WidgetHolder {
+  width: 100%;
+  clear: both;
+}
