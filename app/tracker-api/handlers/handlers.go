@@ -15,7 +15,7 @@ import (
 func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log.Logger) http.Handler {
 
 	// Construct the web.App which holds all routes as well as common Middleware.
-	app := web.NewApp(shutdown, mid.Logger(log), mid.Errors(log))
+	app := web.NewApp(shutdown, mid.Logger(log), mid.Errors(log), mid.CORS(log))
 
 	t := trackerHandlers{}
 	app.Handle("GET", "/", nil, t.home)

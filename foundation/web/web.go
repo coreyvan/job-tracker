@@ -44,7 +44,6 @@ func NewApp(shutdown chan os.Signal, mw ...Middleware) *App {
 		shutdown: shutdown,
 		mw:       mw,
 	}
-	app.mux.Use(CORS)
 
 	return &app
 }
