@@ -1,17 +1,20 @@
 package company
 
-import "github.com/coreyvan/job-tracker/business/data"
-
 // Company represents the object model for a company
 type Company struct {
-	data.Base
-	Name           string   `json:"Company.name"`
-	Description    string   `json:"Company.description"`
-	Website        string   `json:"Company.website"`
-	Industries     []string `json:"Company.industries"`
-	Months         int      `json:"Company.months"`
-	Location       string   `json:"Company.location"`
-	RemotePossible bool     `json:"Company.remote_possible"`
+	ID             string   `json:"id"`
+	Name           string   `json:"name"`
+	Description    string   `json:"description,omitempty"`
+	Website        string   `json:"website,omitempty"`
+	Industries     []string `json:"industries,omitempty"`
+	Months         int      `json:"months,omitempty"`
+	Location       string   `json:"location,omitempty"`
+	RemotePossible bool     `json:"remote_possible,omitempty"`
+}
+
+// Ref reference to company
+type Ref struct {
+	UID string `json:"id"`
 }
 
 type addResult struct {

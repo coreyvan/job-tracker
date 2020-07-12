@@ -22,10 +22,17 @@ func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log
 
 	c := companyHandlers{gqlConfig: gql}
 	app.Handle("POST", "/company", nil, c.create)
-	app.Handle("GET", "/company", nil, c.list)
 	app.Handle("GET", "/company", []string{"search", "{query}"}, c.search)
+	app.Handle("GET", "/companies", nil, c.list)
 	app.Handle("GET", "/company/{id}", nil, c.getOne)
 	app.Handle("DELETE", "/company/{id}", nil, c.delete)
+
+	r := roleHandlers{gqlConfig: gql}
+	app.Handle("POST", "/role", nil, r.create)
+	app.Handle("GET", "/roles", nil, r.list)
+	app.Handle("GET", "/role", []string{"search", "{query}"}, r.search)
+	app.Handle("GET", "/role/{id}", nil, r.getOne)
+	app.Handle("DELETE", "/role/{id}", nil, r.delete)
 
 	return app.Mux()
 }

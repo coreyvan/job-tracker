@@ -10,7 +10,17 @@ dgraph:
 		dgraph/standalone:latest
 
 import:
-	go build app/tracker-admin/main.go && ./main import && rm main
+	go run app/tracker-admin/main.go import company
+	go run app/tracker-admin/main.go import role
+
+import-company:
+	go run app/tracker-admin/main.go import company
+	
+import-role:
+	go run app/tracker-admin/main.go import role
+
+schema:
+	go run app/tracker-admin/main.go schema
 
 client-ui:
 	docker build \
