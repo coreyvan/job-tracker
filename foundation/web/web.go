@@ -44,6 +44,7 @@ func NewApp(shutdown chan os.Signal, mw ...Middleware) *App {
 		shutdown: shutdown,
 		mw:       mw,
 	}
+	app.mux.Use(CORS)
 
 	return &app
 }
@@ -73,8 +74,12 @@ func (a *App) Handle(verb, path string, params []string, handler Handler, mw ...
 		}
 	}
 
+	// Add OPTIONS to every handler to handle CORS options requests
+	// TODO: this is sneaky and unclear but works, need to find a better way of doing this
+	verbs := []string{verb, http.MethodOptions}
+
 	// Add this handler for the specified verb and route.
-	a.mux.Handle(path, http.HandlerFunc(h)).Methods(verb).Queries()
+	a.mux.Handle(path, http.HandlerFunc(h)).Methods(verbs...).Queries()
 }
 
 // SignalShutdown is used to gracefully shutdown the app when an integrity
