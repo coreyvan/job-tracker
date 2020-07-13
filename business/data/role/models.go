@@ -17,14 +17,14 @@ type Role struct {
 	ID             string          `json:"id"`
 	Title          string          `json:"title"`
 	Company        company.Company `json:"company"`
-	URL            string          `json:"url"`
-	Technologies   []string        `json:"technologies"`
-	PayLower       int             `json:"pay_lower"`
-	PayUpper       int             `json:"pay_upper"`
-	Location       string          `json:"location"`
-	Level          string          `json:"level"`
-	RemotePossible bool            `json:"remote_possible"`
-	PostedOn       time.Time       `json:"posted_on"`
+	URL            string          `json:"url,omitempty"`
+	Technologies   []string        `json:"technologies,omitempty"`
+	PayLower       int             `json:"pay_lower,omitempty"`
+	PayUpper       int             `json:"pay_upper,omitempty"`
+	Location       string          `json:"location,omitempty"`
+	Level          string          `json:"level,omitempty"`
+	RemotePossible bool            `json:"remote_possible,omitempty"`
+	PostedOn       time.Time       `json:"posted_on,omitempty"`
 }
 
 type addResult struct {
@@ -38,7 +38,7 @@ type addResult struct {
 func (addResult) document() string {
 	return `{
 			role {
-					id
+				id
 			}
 		}`
 }

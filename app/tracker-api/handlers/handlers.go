@@ -34,6 +34,11 @@ func API(build string, shutdown chan os.Signal, gql data.GraphQLConfig, log *log
 	app.Handle("GET", "/role/{id}", nil, r.getOne)
 	app.Handle("DELETE", "/role/{id}", nil, r.delete)
 
+	a := applicationHandlers{gqlConfig: gql}
+	app.Handle("POST", "/application", nil, a.create)
+	app.Handle("GET", "/application/{id}", nil, a.getOne)
+	app.Handle("DELETE", "/application/{id}", nil, a.delete)
+	app.Handle("GET", "/applications", nil, a.list)
 	return app.Mux()
 }
 

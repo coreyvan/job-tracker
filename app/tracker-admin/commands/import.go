@@ -8,6 +8,7 @@ import (
 
 	"github.com/ardanlabs/graphql"
 	"github.com/coreyvan/job-tracker/business/data"
+	"github.com/coreyvan/job-tracker/business/data/application"
 	"github.com/coreyvan/job-tracker/business/data/company"
 	"github.com/coreyvan/job-tracker/business/data/role"
 	"github.com/pkg/errors"
@@ -29,6 +30,11 @@ func Import(gqlCfg data.GraphQLConfig, log *log.Logger, subCommand string) error
 		_, err := importRoles("test_data/roles.json", gql)
 		if err != nil {
 			return errors.Wrap(err, "importing roles")
+		}
+	case "application":
+		_, err := importApplications("test_data/applications.json", gql)
+		if err != nil {
+			return errors.Wrap(err, "importing applications")
 		}
 	}
 	return nil
@@ -60,11 +66,6 @@ func importCompanies(file string, gql *graphql.GraphQL) ([]company.Company, erro
 func importRoles(file string, gql *graphql.GraphQL) ([]role.Role, error) {
 	var roles []role.Role
 
-	// b, err := ioutil.ReadFile(file)
-	// if err != nil {
-	// 	return roles, errors.Wrap(err, "opening json file")
-	// }
-
 	f, err := os.Open(file)
 	if err != nil {
 		return roles, errors.Wrap(err, "opening json file")
@@ -85,4 +86,27 @@ func importRoles(file string, gql *graphql.GraphQL) ([]role.Role, error) {
 		retRole = append(retRole, r)
 	}
 	return retRole, nil
+}
+
+func importApplications(file string, gql *graphql.GraphQL) ([]application.Application, error) {
+	var applications []application.Application
+
+	f, err := os.Open(file)
+	if err != nil {
+		return []application.Application{}, errors.Wrap(err, "opening json file")
+	}
+
+	if err = json.NewDecoder(f).Decode(&applications); err != nil {
+		return []application.Application{}, errors.Wrap(err, "decoding data")
+	}
+
+	var retApp []application.Application
+	for _, v := range applications {
+		a, err := application.Add(context.Background(), gql, v)
+		if err != nil {
+			return []application.Application{}, errors.Wrap(err, "creating application")
+		}
+		retApp = append(retApp, a)
+	}
+	return retApp, nil
 }
