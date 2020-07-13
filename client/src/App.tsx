@@ -27,7 +27,10 @@ class App extends React.Component <IAppProps, IAppState>{
 
   componentDidMount() {
     fetch(companiesEndpoint,{
-      method: 'get'
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
     .then(resp=>resp.json())
     .then(data=> {
@@ -37,7 +40,10 @@ class App extends React.Component <IAppProps, IAppState>{
     })
 
     fetch(rolesEndpoint,{
-      method: 'get'
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
     .then(resp=>resp.json())
     .then(data=> {
