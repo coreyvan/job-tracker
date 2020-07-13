@@ -21,3 +21,10 @@ import-role:
 
 schema:
 	go run app/tracker-admin/main.go schema
+
+client-ui:
+	docker build \
+		-f ./client/Dockerfile \
+		-t job-tracker/client \
+		--build-arg NGINX_CONF='nginx.conf' \
+		client
