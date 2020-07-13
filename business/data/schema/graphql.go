@@ -37,4 +37,10 @@ type Role {
 	level: String
 	remote_possible: Boolean @search
 	posted_on: DateTime
+}
+
+type Application {
+	id: ID!
+	role: Role!
+	applied_on: DateTime
 }`

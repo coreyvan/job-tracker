@@ -12,12 +12,16 @@ dgraph:
 import:
 	go run app/tracker-admin/main.go import company
 	go run app/tracker-admin/main.go import role
+	go run app/tracker-admin/main.go import application
 
 import-company:
 	go run app/tracker-admin/main.go import company
 	
 import-role:
 	go run app/tracker-admin/main.go import role
+
+import-application:
+	go run app/tracker-admin/main.go import application
 
 schema:
 	go run app/tracker-admin/main.go schema
