@@ -42,3 +42,16 @@
   width: 100%;
   clear: both;
 }
+
+.NewAppCompanyDivider{
+  padding: 10px;
+  clear:both;
+}
+
+.Page{
+  padding: 10px;
+}
+
+.NewCompanyForm{
+  width: 600px;
+}

@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import Company from './components/Company';
 import NavBar from './components/NavBar';
-import Role from './components/Role';
+import Home from './pages/Home'
+import NewApp from './pages/NewApp'
 import {ICompany, IRole} from './utils/types';
 
 const companiesEndpoint = "http://localhost:3000/companies?limit=5"
@@ -14,6 +14,7 @@ interface IAppProps {
 interface IAppState {
   companies: Array<ICompany>
   roles: Array<IRole>
+  route: string
 }
 
 class App extends React.Component <IAppProps, IAppState>{
@@ -21,7 +22,8 @@ class App extends React.Component <IAppProps, IAppState>{
     super(props);
     this.state = {
       companies: [],
-      roles: []
+      roles: [],
+      route: "Home"
     }
   }
 
@@ -53,28 +55,24 @@ class App extends React.Component <IAppProps, IAppState>{
     })
   }
 
+  onRouteChanged = (route: string) => {
+    console.log(route)
+    this.setState({route: route});
+  }
+
   render() {
     var companies = this.state.companies
     var roles = this.state.roles
+    let route = this.state.route
     return (
       <div className="App">
-        <NavBar />
-        <div className="WidgetHolder">
-          {companies.map((company)=>
-            <Company 
-              key={company.id}
-              company={company} 
-              />
-          )}
-        </div>
-        <div className="WidgetHolder">
-          {roles.map((role)=>
-            <Role 
-              key={role.id}
-              role={role} 
-              />
-          )}
-        </div>
+        <NavBar routeChange={this.onRouteChanged}/>
+        { route === 'Home'
+          ? <Home
+              companies={companies}
+              roles={roles}/>
+          : <NewApp
+              companies={companies}/>}
       </div>
     );
   }
