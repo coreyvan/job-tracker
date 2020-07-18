@@ -16,6 +16,8 @@ class Company extends Component<{company: ICompany, onSelect?:Function}> {
         if (company.remote_possible){
             availableText = "Remote"
         }
+        //Hides the button when it doesn't do anything
+        let hideButtonClass = (this.props.onSelect) ? "": " Hidden"
         let onClickFunc = () =>{
             this.props.onSelect?.(company)
         }
@@ -24,7 +26,7 @@ class Company extends Component<{company: ICompany, onSelect?:Function}> {
                 <CardTitle>{company.name}</CardTitle>
                 <CardSubtitle>{company.location}&nbsp;<Badge color="dark">{availableText}</Badge></CardSubtitle>
                 <CardText>{company.description}</CardText>
-                <Button className={"CompanyButton"} color="primary" onClick={onClickFunc}>Apply</Button>
+                <Button className={"CompanyButton" + hideButtonClass} color="primary" onClick={onClickFunc}>Apply</Button>
             </Card>
         )
     }

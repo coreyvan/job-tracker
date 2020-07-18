@@ -21,10 +21,10 @@ class NewCompanyForm extends React.Component <INewCompanyFormProps, {}> {
             name: event.target[0].value,
             description: event.target[1].value,
             website: event.target[2].value,
-            industries: event.target[3].value,
-            months: event.target[4].value,
+            industries: [event.target[3].value],
+            months: parseInt(event.target[4].value),
             location: event.target[5].value,
-            remote_possible: event.target[6].value
+            remote_possible: event.target[6].checked
         } as ICompany
         this.props.onSubmit(newCompany)
     }

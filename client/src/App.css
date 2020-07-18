@@ -55,3 +55,7 @@
 .NewCompanyForm{
   width: 600px;
 }
+
+.Hidden {
+  visibility: hidden;
+}
